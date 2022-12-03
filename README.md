@@ -1,2 +1,2 @@
-# Flask-SQLAlchemy-Pagination
+# flask-fast-pagination
 Faster pagination using Seek method
