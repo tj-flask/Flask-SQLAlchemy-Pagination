@@ -26,8 +26,9 @@ class Pagination:
         last_record = (
             self.query
             .with_entities(*self.order_by_fields)
+            .offset(abs(self.per_page * (self.page - 1) - 1))
             .limit(1)
-            .offset(abs(self.per_page * (self.page - 1) - 1)).first()
+            .first()
         )
 
         if last_record:
