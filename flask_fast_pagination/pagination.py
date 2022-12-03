@@ -48,6 +48,6 @@ class Pagination:
     def has_next(self) -> bool:
         return self._page.paging.has_next if self.page else False
 
-    @property
+    @cached_property
     def total(self) -> int:
         return self.query.order_by(None).count()
