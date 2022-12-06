@@ -23,10 +23,15 @@ class Pagination:
 
     @cached_property
     def _page(self) -> Page | List:
+        offset = self.per_page * (self.page - 1) - 1
+
+        if offset < 0:
+            return get_page(self.query, per_page=self.per_page)
+
         last_record = (
             self.query
             .with_entities(*self.order_by_fields)
-            .offset(abs(self.per_page * (self.page - 1) - 1))
+            .offset(offset)
             .limit(1)
             .first()
         )
@@ -43,11 +48,11 @@ class Pagination:
 
     @property
     def has_prev(self) -> bool:
-        return self._page.paging.has_previous if self.page else False
+        return self._page.paging.has_previous if self._page else False
 
     @property
     def has_next(self) -> bool:
-        return self._page.paging.has_next if self.page else False
+        return self._page.paging.has_next if self._page else False
 
     @cached_property
     def total(self) -> int:
